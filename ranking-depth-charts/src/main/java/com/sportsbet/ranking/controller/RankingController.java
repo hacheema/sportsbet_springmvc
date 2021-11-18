@@ -2,24 +2,25 @@ package com.sportsbet.ranking.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.hibernate.hql.internal.CollectionSubqueryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.sportsbet.ranking.exception.UserNotFoundException;
 import com.sportsbet.ranking.model.Player;
-import com.sportsbet.ranking.config.ApplicationConfiguration;
 import com.sportsbet.ranking.domain.Players;
 import com.sportsbet.ranking.service.RankingService;
 
@@ -34,14 +35,14 @@ public class RankingController {
 	RankingService rankingService;
 
 	@PostMapping(value = "/save", produces = { "application/text" }, consumes = { "application/json" })
-	public ResponseEntity<String> addPlayerToDepthChart(@RequestBody Player playerDto) {
+	public ResponseEntity<String> addPlayerToDepthChart(@RequestBody final Player playerDto) {
 
 		LOGGER.info("Going to save Player: {}",playerDto.getPlayerId());
 		rankingService.savePlayer(playerDto);
 
 		Players playerListFromDB = rankingService.fetchPlayersForPosition(playerDto);
 
-		if (playerListFromDB.size() == 1) {
+		if (!(CollectionUtils.isEmpty(playerListFromDB)) && playerListFromDB.size() == 1) {
 			return new ResponseEntity<String>(
 					playerDto.getPosition() + ":" + Arrays.asList(playerListFromDB.get(0).getPlayerId()),
 					HttpStatus.OK);
