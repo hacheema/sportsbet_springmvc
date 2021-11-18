@@ -17,7 +17,6 @@ import com.sportsbet.ranking.exception.UserNotFoundException;
 import com.sportsbet.ranking.comparator.PlayerComparator;
 import com.sportsbet.ranking.model.Player;
 import com.sportsbet.ranking.domain.Players;
-import com.sportsbet.ranking.repository.RankingRepository;
 import com.sportsbet.ranking.repository.impl.RankingRepositoryImpl;
 
 @Service
@@ -43,7 +42,7 @@ public class RankingService {
 		playerToSave.setDepth(playerDto.getDepth());
 		playerToSave.setPlayerId(playerDto.getPlayerId());
 		LOGGER.info("{} saved successfully", playerDto.getPlayerId());
-		playerRepository.save(playerToSave);
+		playerRepository.savePlayer(playerToSave);
 	}
 
 	/*
@@ -72,7 +71,7 @@ public class RankingService {
 	 * 
 	 * @output: Boolean : true if player exists, false otherwise
 	 */
-	public Boolean deletePlayersFromPosition(Player playerDto) throws UserNotFoundException {
+	/*public Boolean deletePlayersFromPosition(Player playerDto) throws UserNotFoundException {
 		Optional<com.sportsbet.ranking.domain.Player> player = playerRepository
 				.findById(playerDto.getPlayerId() + playerDto.getPosition());
 		try {
@@ -85,7 +84,7 @@ public class RankingService {
 		playerRepository.deleteById(playerDto.getPlayerId() + playerDto.getPosition());
 		return true;
 
-	}
+	}*/
 
 	/*
 	 * This method fetch Players based on the position
@@ -105,9 +104,9 @@ public class RankingService {
 	 * 
 	 * @output: List of players for all positions
 	 */
-	public List<com.sportsbet.ranking.domain.Player> getFullDepthChart() {
+	/*public List<com.sportsbet.ranking.domain.Player> getFullDepthChart() {
 		return playerRepository.findAll();
-	}
+	}*/
 
 	/*
 	 * This method fetch Players listed below for given Player

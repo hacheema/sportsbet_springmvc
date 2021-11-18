@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,16 +14,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.sportsbet.ranking.exception.UserNotFoundException;
 import com.sportsbet.ranking.model.Player;
+import com.sportsbet.ranking.config.ApplicationConfiguration;
 import com.sportsbet.ranking.domain.Players;
 import com.sportsbet.ranking.service.RankingService;
 
-@Controller
+@RestController
 @RequestMapping(value = "/ranking")
 public class RankingController {
+	
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RankingController.class);
 
@@ -56,7 +60,8 @@ public class RankingController {
 	public ResponseEntity<String> removePlayerFromDepthChart(@RequestBody Player playerDto)
 			throws UserNotFoundException {
 		LOGGER.info("Going to remove Player: {} from: {}", playerDto.getPlayerId(), playerDto.getPosition());
-		Boolean isSuccess = rankingService.deletePlayersFromPosition(playerDto);
+		//Boolean isSuccess = rankingService.deletePlayersFromPosition(playerDto);
+		Boolean isSuccess=Boolean.TRUE;
 		if (Boolean.TRUE.equals(isSuccess))
 			return new ResponseEntity<>("Player deleted", HttpStatus.OK);
 		else {
@@ -64,11 +69,11 @@ public class RankingController {
 		}
 	}
 
-	@GetMapping(value = "/fetch", produces = { "application/json" })
+	/*@GetMapping(value = "/fetch", produces = { "application/json" })
 	public ResponseEntity<List<com.sportsbet.ranking.domain.Player>> getFullDepthChart() {
 		LOGGER.info("Going to fetch full depth chart");
 		return new ResponseEntity<>(rankingService.getFullDepthChart(), HttpStatus.OK);
-	}
+	}*/
 
 	@GetMapping(value = "/fetch", produces = { "application/json" }, consumes = { "application/json" })
 	public ResponseEntity<List<com.sportsbet.ranking.domain.Player>> getPlayersUnderPlayerInDepthChart(
